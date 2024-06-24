@@ -35,18 +35,20 @@ function App() {
         setIsLoading(false); 
       }
     }
-    // if(query.length < 3) {
-    //   setCharacters([])
+    if(query.length < 3) {
+      setCharacters([])
 
-    //   return;
+      return;
 
-    // }
+    }
     fetchData();
   }, [query]);
 
 
   const handleCharacter = (id) => {
-    setSelectId(prevId => prevId === id ? null : id); //id user
+    setSelectId((prevId) => prevId === id ? null : id); //id user
+  
+    
   }
   console.log(selectId);
   return (

@@ -7,34 +7,43 @@ import Loader from "./Loader";
 function CharacterDetail({ selectId }) {
   const [character, setCharacter] = useState(null); //change data
   const [isLoading, setIsLoading] = useState(false);
-  const [episod, setEpisod] = useState([]);
+  const [episodes, setEpisodes] = useState([]);
   useEffect(() => {
     async function fetchData() {
-     try {
-      setIsLoading(true);
-      setCharacter(null);
-      const {data} = await axios.get(`https://rickandmortyapi.com/api/character/${selectId}`);
-      setCharacter(data);
-      const episodeId = data.episod.map((e) => {
-        return e.split("/").at(-1); //[1,2,3, ...]
-       } )
-       const {data: episodData} = await axios.get(`https://rickandmortyapi.com/api/episod/${episodeId}`);
-       setEpisod(episodData);
-     } catch (err) {
-      toast.error(err.response.data.error);
-     } finally {
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        setCharacter(null);
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/${selectId}`
+        );
+        setCharacter(data);
 
-     }
+        const episodesId = data.episode.map((e) => e.split("/").at(-1));
+        console.log(episodesId);
+        const { data: episodeData } = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodesId}`
+        );
+        setEpisodes(episodeData);
+      } catch (err) {
+        toast.error(err.response.data.error);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-
-    if(selectId) fetchData(); //bc selectid first one is null
+    if (selectId) fetchData(); //bc selectid first one is null
   }, [selectId]);
 
-  if(isLoading) return <div style={{
-    flex: 1,
-  }}><Loader /></div>
+  if (isLoading)
+    return (
+      <div
+        style={{
+          flex: 1,
+        }}
+      >
+        <Loader />
+      </div>
+    );
 
   if (!character || !selectId) {
     return (
